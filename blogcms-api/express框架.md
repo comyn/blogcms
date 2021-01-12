@@ -1094,3 +1094,6 @@ function upload(file, signed_request, url, done) {
 
 
 上面代码首先监听 file 控件的 change 事件，一旦有变化，就先向服务器要求一个临时的上传 URL，然后向该 URL 上传文件。
+
+
+

@@ -8,13 +8,11 @@ const router = express.Router()
 
 // 2. 把路由都挂载到 router 路由容器中
 
-router.get('/users', userController.list).post('/users', (req, res, next) => {
-
-}).patch('/users', (req, res, next) => {
-
-}).delete('/users', (req, res, next) => {
-
-})
+router
+  .get('/users', userController.list)
+  .post('/users', userController.create)
+  .patch('/users/:id', userController.update)
+  .delete('/users/:id', userController.destroy)
 
 router.get('/test1', function (req, res) {
   res.send('get test1')

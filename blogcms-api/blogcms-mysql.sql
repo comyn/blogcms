@@ -15,13 +15,13 @@ create table users(
 	email nvarchar(50) null comment '邮箱', 
 	address nvarchar(200) null comment '住址',
 	avatar nvarchar(100) null comment '头像',
-	gender bit not null default 1 comment '性别:0女,1男,2未知',
+	gender tinyint not null default 1 comment '性别:0女,1男,2未知',
 	birth datetime null comment '出生日期', 
 	remark nvarchar(2000) null comment '备注',
-	status bit not null default 1 comment '启用状态,默认为1表示启用', 
+	status tinyint not null default 1 comment '启用状态,默认为1表示启用', 
 	create_time timestamp not null default current_timestamp comment '创建时间',
 	update_time timestamp null default current_timestamp on update current_timestamp comment '更新时间',
-	is_delete bit null default 0 comment '是否注销,默认为0表示没有注销'
+	is_delete tinyint null default 0 comment '是否注销,默认为0表示没有注销'
 )COMMENT = '用户信息表';
 
 -- 文章表
