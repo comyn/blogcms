@@ -26,18 +26,14 @@ app.set('view engine', 'html')
 // 运行hbs模块
 app.engine('html', hbs.__express)
 
-// 配置模板引擎和 body-parser 一定要在 app.use(router) 挂载路由之前
-// parse application/x-www-form-urlencoded
+/**
+ * 配置解析表单请求体
+ * 配置模板引擎和 body-parser 一定要在 app.use(router) 挂载路由之前
+ * parse application/x-www-form-urlencoded
+ */
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
-
-// app.use(express.favicon())
-// app.use(express.logger('dev'))
-// app.use(express.bodyParser())
-// app.use(express.methodOverride())
-// 路由方式2, 把路由容器挂载到 app 服务中,推荐
-app.use(router)
 
 // 设定静态文件目录，比如本地文件
 // 目录为demo/public/images，访问
@@ -50,6 +46,9 @@ app.all('*', function (request, response, next) {
   // response.writeHead(200, { 'Content-Type': 'text/plain' }) // 需要引入http,express是http的封装,不需要再引入
   next()
 })
+
+// 路由方式2, 把路由容器挂载到 app 服务中,推荐
+app.use(router)
 
 // 路由方式1
 routes(app)
@@ -66,16 +65,16 @@ app.post('/', function (req, res) {
   res.send('Got a POST request')
 })
 
-app.put('/user', function (req, res) {
-  res.send('Got a PUT request at /user')
+app.put('/fun', function (req, res) {
+  res.send('Got a PUT request at /fun')
 })
 
-app.patch('/user', function (req, res) {
-  res.send('Got a PATCH request at /user')
+app.patch('/fun', function (req, res) {
+  res.send('Got a PATCH request at /fun')
 })
 
-app.delete('/user', function (req, res) {
-  res.send('Got a DELETE request at /user')
+app.delete('/fun', function (req, res) {
+  res.send('Got a DELETE request at /fun')
 })
 // ******************
 // #endregion 原生无路由 end
