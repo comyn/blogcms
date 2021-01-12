@@ -10,3 +10,5 @@
 
 1. 必须是当前项目目录
 2. npm install --save-dev @types/node
+
+## 子目录 views，用于存放网页模板

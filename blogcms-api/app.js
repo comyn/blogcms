@@ -1,11 +1,17 @@
 const express = require('express')
 const path = require('path')
+const routes = require('./routes')
 
 const app = express()
 const port = 3000
 
-// 向客户端公开目录,等价于 app.use(express.static(path.join(__dirname, './public'))) 或 app.use('/static', express.static(path.join(__dirname, './public')))
+// 设定静态文件目录，比如本地文件
+// 目录为demo/public/images，访问
+// 网址则显示为http://localhost:3000/images
+// app.use(express.static(path.join(__dirname, './public'))) 或 app.use('/static', express.static(path.join(__dirname, './public')))
 app.use('/static', express.static(path.join(__dirname, './public')))
+
+routes(app)
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
