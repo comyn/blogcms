@@ -3,7 +3,8 @@ const express = require('express')
 const path = require('path')
 const routes = require('./routes')
 const hbsroutes = require('./routes/hbs')
-// const router = require('./router')
+const router = require('./router')
+
 // 加载hbs模块
 const hbs = require('hbs')
 const bodyParser = require('body-parser')
@@ -35,7 +36,8 @@ app.use(bodyParser.json())
 // app.use(express.logger('dev'))
 // app.use(express.bodyParser())
 // app.use(express.methodOverride())
-// app.use(app.router)
+// 路由方式2, 把路由容器挂载到 app 服务中,推荐
+app.use(router)
 
 // 设定静态文件目录，比如本地文件
 // 目录为demo/public/images，访问
@@ -52,8 +54,6 @@ app.all('*', function (request, response, next) {
 // 路由方式1
 routes(app)
 hbsroutes(app)
-// 路由方式2, 把路由容器挂载到 app 服务中,推荐
-// app.use(router)
 
 // ******************
 // #region 原生无路由 start
