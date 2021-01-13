@@ -16,6 +16,7 @@ exports.list = async function (req, res, next) {
     //     _page: 1,
     //     _limit: 10
     // }
+    console.log(req.query)
     // 对象解构赋值的默认值写法
     let { _page = 1, _limit = 20 } = req.query
     if (_page < 1) {
@@ -39,7 +40,8 @@ exports.list = async function (req, res, next) {
      */
     const start = (parseInt(_page) - 1) * _limit
 
-    const sqlStr = `select * from users limit ${start}, ${_limit}`
+    const andConditionStr = sqlHelper.andCondition(req.query)
+    const sqlStr = `select * from users where ${andConditionStr} limit ${start}, ${_limit}`
 
     const users = await db.query(sqlStr)
 
@@ -47,9 +49,6 @@ exports.list = async function (req, res, next) {
     const [{ count }] = await db.query('select count(*) as count from users')
 
     res.status(200).json({ code: 0, messages: 'success', data: { count, users } })
-    // const andConditionStr = sqlHelper.andCondition(req.query)
-    // const sqlStr = `select * from users where ${andConditionStr}`
-    // res.status(200).json(await db.query(sqlStr))
   } catch (error) {
     next(error)
   }
