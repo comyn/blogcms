@@ -2,6 +2,33 @@
 // 专门用来包装路由的
 const express = require('express')
 const userController = require('./controllers/user')
+const db = require('./models/db')
+
+async function checkNoUser (req, res, next) {
+  try {
+    const body = req.body
+    const [user] = await db.query(`select * from users where username = '${body.username}'`)
+    if (user) {
+      return res.status(200).jso({ code: 1, message: 'User already exits.' })
+    }
+  } catch (error) {
+    next(error)
+  }
+  next()
+}
+
+async function checkHasUser (req, res, next) {
+  try {
+    const { id } = req.params
+    const [user] = await db.query(`select * from users where id = ${id}`)
+    if (!user) {
+      return res.status(404).json({ code: 1, message: 'User not found.' })
+    }
+  } catch (error) {
+    next(error)
+  }
+  next()
+}
 
 // 1. 创建一个路由容器
 const router = express.Router()
@@ -10,8 +37,8 @@ const router = express.Router()
 
 router
   .get('/users', userController.list)
-  .post('/users', userController.create)
-  .patch('/users/:id', userController.update)
+  .post('/users', checkNoUser, userController.create)
+  .patch('/users/:id', checkHasUser, userController.update)
   .delete('/users/:id', userController.destroy)
 
 router.get('/test1', function (req, res) {

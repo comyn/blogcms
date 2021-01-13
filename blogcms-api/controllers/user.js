@@ -11,10 +11,45 @@ const md5 = require('blueimp-md5')
  */
 exports.list = async function (req, res, next) {
   try {
-    console.log(req.query)
-    const andConditionStr = sqlHelper.andCondition(req.query)
-    const sqlStr = `select * from users where ${andConditionStr}`
-    res.status(200).json(await db.query(sqlStr))
+    // 对象解构赋值起别名的写法
+    // let {_page: pageNo, _limit: pageSize} = {
+    //     _page: 1,
+    //     _limit: 10
+    // }
+    // 对象解构赋值的默认值写法
+    let { _page = 1, _limit = 20 } = req.query
+    if (_page < 1) {
+      _page = 1
+    }
+    if (_limit < 1) {
+      _limit = 1
+    }
+    if (_limit > 20) {
+      _limit = 20
+    }
+
+    // 分页处理开始的索引
+    /**
+     * index _page _limit   数据下标        数据起始下标
+     * 0      1      20       0~19            0
+     * 1      2      20       20~39           20
+     * 2      3      20       30~59           30
+     * 3      4      20       60~89           60
+     *                                  (_page - 1) * _limit
+     */
+    const start = (parseInt(_page) - 1) * _limit
+
+    const sqlStr = `select * from users limit ${start}, ${_limit}`
+
+    const users = await db.query(sqlStr)
+
+    // 查询总条数 先数组结构再对象解构
+    const [{ count }] = await db.query('select count(*) as count from users')
+
+    res.status(200).json({ code: 0, messages: 'success', data: { count, users } })
+    // const andConditionStr = sqlHelper.andCondition(req.query)
+    // const sqlStr = `select * from users where ${andConditionStr}`
+    // res.status(200).json(await db.query(sqlStr))
   } catch (error) {
     next(error)
   }
@@ -29,6 +64,9 @@ exports.list = async function (req, res, next) {
 exports.create = async (req, res, next) => {
   try {
     const body = req.body
+
+    let users = await db.query(`select * from users where username = '${body.username}'`)
+
     const sqlStr = `insert into users(username, nickname, realname, password, telephone, email, address, avatar, gender, birth, remark, status, create_time, update_time, is_delete) 
     values(
       '${body.username}',
@@ -47,9 +85,8 @@ exports.create = async (req, res, next) => {
       '${moment().format('YYYY-MM-DD hh:mm:ss')}',
       ${body.is_delete ? body.is_delete : 0}
     )`
-    console.log(sqlStr)
     const result = await db.query(sqlStr)
-    const users = await db.query(`select * from users where id = ${result.insertId}`)
+    users = await db.query(`select * from users where id = ${result.insertId}`)
     res.status(201).json(users[0])
   } catch (error) {
     next(error)
@@ -68,7 +105,6 @@ exports.update = async (req, res, next) => {
     const { id } = req.params
     // 获取表单数据
     const body = req.body
-    console.log(body.nickname)
 
     let sqlStr = 'update users set '
     sqlStr += body.username ? `username = '${body.username}'` : ''
@@ -108,12 +144,13 @@ exports.update = async (req, res, next) => {
 exports.destroy = async (req, res, next) => {
   try {
     // 执行删除操作
-    await db.query(`
+    const result = await db.query(`
         delete from users where id = ${req.params.id}
     `)
+    console.log(result)
 
     // 响应成功
-    res.status(201).json({})
+    res.status(204).json({})
   } catch (err) {
     next(err)
   }
