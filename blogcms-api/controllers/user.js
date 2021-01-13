@@ -55,6 +55,28 @@ exports.list = async function (req, res, next) {
 }
 
 /**
+ * 获取单个用户
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+exports.one = async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const sqlStr = `select * from users where id =${id}`
+    const users = await db.query(sqlStr)
+    if (users.length > 0) {
+      res.status(200).json({ code: 0, message: 'success', data: users[0] })
+    } else {
+      res.status(403)
+    }
+    res.status(404).json({ code: 1, message: 'User not found', data: null })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/**
  * 创建用户
  * @param {*} req
  * @param {*} res
