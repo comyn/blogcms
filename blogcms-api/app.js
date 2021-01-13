@@ -1,5 +1,6 @@
 // app.js文件
 const express = require('express')
+const session = require('express-session')
 const path = require('path')
 const routes = require('./routes')
 const hbsroutes = require('./routes/hbs')
@@ -40,6 +41,8 @@ app.use(bodyParser.json())
 // 网址则显示为http://localhost:3000/images
 // app.use(express.static(path.join(__dirname, 'public')))
 app.use('/static', express.static(path.join(__dirname, './public')))
+
+app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: true }))
 
 // 所有路由都会经过该中间件,可以用于检验是否登录或者是否具有权限
 app.all('*', function (request, response, next) {

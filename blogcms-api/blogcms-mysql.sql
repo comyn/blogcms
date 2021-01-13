@@ -31,8 +31,8 @@ create table topics(
 	content text not null comment '文章内容',
 	author int not null comment '作者',
 	create_time timestamp not null default current_timestamp comment '创建时间',
-	update_time timestamp null default current_timestamp on update current_timestamp comment '更新时间',
-	is_delete bit null default 0 comment '是否删除,默认为0表示没有删除'
+	update_time timestamp not null default current_timestamp on update current_timestamp comment '更新时间',
+	is_delete tinyint not null default 0 comment '是否删除,默认为0表示没有删除'
 )comment = '文章表';
 
 -- 评论表
@@ -40,9 +40,9 @@ create table comments (
 	id int not null primary key auto_increment comment '主键自增',
 	content text not null comment '评论内容',
 	topic_id int not null comment '所属文章',
-	author int not null comment '所属作者',
-	reply_id int null comment '所属回复人',
+	reply_id int null comment '指向父评论的id,如果不是对评论的回复,那么该值为null',
+  user_id int not null comment '评论发表人',
 	create_time timestamp not null default current_timestamp comment '创建时间',
-	update_time timestamp null default current_timestamp on update current_timestamp comment '更新时间',
-	is_delete bit null default 0 comment '是否删除,默认为0表示没有删除'
+	update_time timestamp not null default current_timestamp on update current_timestamp comment '更新时间',
+	is_delete tinyint not null default 0 comment '是否删除,默认为0表示没有删除'
 )comment = '评论表';

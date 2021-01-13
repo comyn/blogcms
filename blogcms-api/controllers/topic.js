@@ -1,10 +1,9 @@
 const db = require('../models/db')
 const sqlHelper = require('../utilities/sqlhelper')
 const moment = require('moment')
-const md5 = require('blueimp-md5')
 
 /**
- * 分页用户列表
+ * 分页blog列表
  * @param {*} req
  * @param {*} res
  * @param {*} next
@@ -41,21 +40,21 @@ exports.list = async function (req, res, next) {
     const start = (parseInt(_page) - 1) * _limit
 
     const andConditionStr = sqlHelper.andCondition(req.query)
-    const sqlStr = `select * from users where ${andConditionStr} limit ${start}, ${_limit}`
+    const sqlStr = `select * from topics where ${andConditionStr} limit ${start}, ${_limit}`
 
-    const users = await db.query(sqlStr)
+    const topics = await db.query(sqlStr)
 
     // 查询总条数 先数组结构再对象解构
-    const [{ count }] = await db.query('select count(*) as count from users')
+    const [{ count }] = await db.query('select count(*) as count from topics')
 
-    res.status(200).json({ code: 0, messages: 'success', data: { count, users } })
+    res.status(200).json({ code: 0, messages: 'success', data: { count, topics } })
   } catch (error) {
     next(error)
   }
 }
 
 /**
- * 获取单个用户
+ * 获取单个blog
  * @param {*} req
  * @param {*} res
  * @param {*} next
@@ -63,20 +62,16 @@ exports.list = async function (req, res, next) {
 exports.one = async (req, res, next) => {
   try {
     const { id } = req.params
-    const sqlStr = `select * from users where id =${id}`
-    const users = await db.query(sqlStr)
-    if (users.length > 0) {
-      res.status(200).json({ code: 0, message: 'success', data: users[0] })
-    } else {
-      res.status(404).json({ code: 1, message: 'User not found', data: null })
-    }
+    const sqlStr = `select * from topics where id =${id}`
+    const topics = await db.query(sqlStr)
+    res.status(200).json({ code: 0, message: 'success', data: topics[0] })
   } catch (error) {
     next(error)
   }
 }
 
 /**
- * 创建用户
+ * 创建blog
  * @param {*} req
  * @param {*} res
  * @param {*} next
@@ -86,36 +81,28 @@ exports.create = async (req, res, next) => {
     const body = req.body
     body.create_time = moment().format('YYYY-MM-DD hh:mm:ss')
     body.update_time = moment().format('YYYY-MM-DD hh:mm:ss')
+    body.user_id = req.session.user.id
     body.is_delete = 0
 
-    const sqlStr = `insert into users(username, nickname, realname, password, telephone, email, address, avatar, gender, birth, remark, status, create_time, update_time, is_delete) 
+    const sqlStr = `insert into topics(title, content, author, create_time, update_time, is_delete) 
     values(
-      '${body.username}',
-      '${body.nickname ? body.nickname : body.username}',
-      '${body.realname ? body.realname : ''}',
-      '${md5(md5(body.password))}',
-      '${body.telephone ? body.telephone : ''}',
-      '${body.email ? body.email : ''}',
-      '${body.address ? body.address : ''}',
-      'default-avatar.png',
-      ${body.gender ? body.gender : 1},
-      ${body.birth ? body.birth : null},
-      '${body.remark ? body.remark : ''}',
-      ${body.status ? body.status : 1},
+      '${body.title}',
+      '${body.content ? body.content : ''}',
+      ${body.user_id},
       '${body.create_time}',
       '${body.update_time}',
       ${body.is_delete}
     )`
     const result = await db.query(sqlStr)
-    const users = await db.query(`select * from users where id = ${result.insertId}`)
-    res.status(201).json(users[0])
+    const topics = await db.query(`select * from topics where id = ${result.insertId}`)
+    res.status(201).json(topics[0])
   } catch (error) {
     next(error)
   }
 }
 
 /**
- * 更新用户
+ * 更新blog
  * @param {*} req
  * @param {*} res
  * @param {*} next
@@ -128,19 +115,10 @@ exports.update = async (req, res, next) => {
     const body = req.body
     body.update_time = moment().format('YYYY-MM-DD hh:mm:ss')
 
-    let sqlStr = 'update users set '
-    sqlStr += body.username ? `username = '${body.username}'` : ''
-    sqlStr += body.nickname ? `, nickname = '${body.nickname}'` : ''
-    sqlStr += body.realname ? `, realname = '${body.realname}'` : ''
-    sqlStr += body.password ? `, password = '${md5(md5(body.password))}'` : ''
-    sqlStr += body.telephone ? `, telephone = '${body.telephone}'` : ''
-    sqlStr += body.email ? `, email = '${body.email}'` : ''
-    sqlStr += body.address ? `, address = '${body.address}'` : ''
-    sqlStr += body.avatar ? `, avatar = '${body.avatar}'` : ''
-    sqlStr += body.gender ? `, gender = ${body.gender}` : ''
-    sqlStr += body.birth ? `, birth = '${body.birth}'` : ''
-    sqlStr += body.remark ? `, remark = '${body.remark}'` : ''
-    sqlStr += body.status ? `, status = ${body.status}` : ''
+    let sqlStr = 'update topics set '
+    sqlStr += body.title ? `title = '${body.title}'` : ''
+    sqlStr += body.content ? `, content = '${body.content}'` : ''
+    sqlStr += body.author ? `, author = '${body.author}'` : ''
     sqlStr += `, update_time = '${body.update_time}'`
     sqlStr += body.is_delete ? `, is_delete = ${body.is_delete}` : ''
     sqlStr += ` where id = ${id}`
@@ -148,17 +126,17 @@ exports.update = async (req, res, next) => {
     // 执行更新操作
     await db.query(sqlStr)
 
-    const [updatedUser] = await db.query(`
-        select * from users where id = ${id}
+    const [updatedTopic] = await db.query(`
+        select * from topics where id = ${id}
     `)
-    res.status(201).json(updatedUser)
+    res.status(201).json(updatedTopic)
   } catch (error) {
     next(error)
   }
 }
 
 /**
- * 删除用户
+ * 删除blog
  * @param {*} req
  * @param {*} res
  * @param {*} next
@@ -167,7 +145,7 @@ exports.destroy = async (req, res, next) => {
   try {
     // 执行删除操作
     await db.query(`
-        delete from users where id = ${req.params.id}
+        delete from topics where id = ${req.params.id}
     `)
 
     // 响应成功
