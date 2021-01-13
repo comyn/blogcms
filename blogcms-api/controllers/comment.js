@@ -90,7 +90,6 @@ exports.create = async (req, res, next) => {
       '${moment().format('YYYY-MM-DD hh:mm:ss')}',
       ${0}
     )`
-    console.log(sqlStr)
     const result = await db.query(sqlStr)
     const topics = await db.query(`select * from comments where id = ${result.insertId}`)
     res.status(201).json(topics[0])
