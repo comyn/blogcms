@@ -17,7 +17,25 @@ module.exports = {
     rules: [
       { test:/\.css$/, use:['style-loader', 'css-loader'] }, // 必须先style-loader,再css-loader
       { test:/\.(png|svg|jpg|gif)$/, use: ['file-loader']}, // 加载文件
-      { test:/\.(woff|woff2|eot|ttf|otf)$/, use: ['file-loader']} // 加载字体文件 
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              limit:50000,   //小于50K的 都打包
+              // publicPath:"img/",	// 替换CSS引用的图片路径 可以替换成爱拍云上的路径
+						  outputPath:"css/fonts/",		// 定义打包完成后最终导出的文件路径
+              // useRelativePath:true,//设置为相对路径
+              name: "[name].[hash:8].[ext]", // 文件的最终名称
+            } 
+          }
+        ]
+      }, // 加载字体文件 
+      // {
+      //   test: /\.(woff|woff2|eot|ttf|otf)$/,
+      //   use: ['url-loader']
+      // }
     ]
   }
 }
