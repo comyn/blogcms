@@ -4,14 +4,17 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 module.exports = { 
   mode: 'development', // 指定环境: "production" | "development" | "none"
   entry: { 
-    bundle:'./src/js/index.js' // 需要打包的文件
+    // bundle:'./src/js/index.js' // 需要打包的文件
+    app: './src/js/index.js',
+    print: './src/js/print.js'
   },
   output: {
-    filename: '[name].js', // 输入的文件名是什么, 生成的文件名也是什么,或[name].[chunkhash:8].js
+    // filename: '[name].js', // 输入的文件名是什么, 生成的文件名也是什么,或[name].[chunkhash:8].js
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist') // 指定生成的文件目录
   },
   plugins: [
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin() // 如果输出目录没有改动，默认清除dist目录内文件
   ],
   module: {
     rules: [
