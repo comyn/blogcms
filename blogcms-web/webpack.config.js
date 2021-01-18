@@ -1,28 +1,33 @@
 const path = require('path')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = { 
   mode: 'development', // 指定环境: "production" | "development" | "none"
   entry: { 
-    // bundle:'./src/js/index.js' // 需要打包的文件
-    app: './src/js/index.js',
-    print: './src/js/print.js'
+    bundle:'./src/js/index.js' // 需要打包的文件
+    // app: './src/js/index.js',
+    // print: './src/js/print.js'
   },
   output: {
     // filename: '[name].js', // 输入的文件名是什么, 生成的文件名也是什么,或[name].[chunkhash:8].js
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, './dist') // 指定生成的文件目录
+    path: path.resolve(__dirname, './dist'), // 指定生成的文件目录
+    publicPath: '/'
   },
   devtool: 'inline-source-map', // 用于开发环境的时候，可以看到错误出现的位置，比如js打包前的错误位置，上产环境取消使用
   devServer: {
-    port: 8081, // 端口号
+    port: 8080, // 端口号,默认8080
     open: true, // 自动打开浏览器，默认为true
-    contentBase: './dist' // 配置告知 webpack-dev-server，在 localhost:8080 下建立服务，将 dist 目录下的文件，作为可访问文件
+    contentBase: './dist', // 配置告知 webpack-dev-server，在 localhost:8080 下建立服务，将 dist 目录下的文件，作为可访问文件
+    hot: true // 热更新，实时刷新本地服务
   },
   plugins: [
     new CleanWebpackPlugin(), // 如果输出目录没有改动，默认清除dist目录内文件
-    new HtmlWebpackPlugin({ title: 'Output Management' })
+    new HtmlWebpackPlugin({ title: 'webpack 入门实战' }),
+    // new webpack.NamedModulesPlugin(), // 热更新，最新版webpack已有，不需要单独添加
+    new webpack.HotModuleReplacementPlugin() // 热更新
   ],
   module: {
     rules: [
