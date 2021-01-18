@@ -15,6 +15,11 @@ module.exports = {
     path: path.resolve(__dirname, './dist') // 指定生成的文件目录
   },
   devtool: 'inline-source-map', // 用于开发环境的时候，可以看到错误出现的位置，比如js打包前的错误位置，上产环境取消使用
+  devServer: {
+    port: 8081, // 端口号
+    open: true, // 自动打开浏览器，默认为true
+    contentBase: './dist' // 配置告知 webpack-dev-server，在 localhost:8080 下建立服务，将 dist 目录下的文件，作为可访问文件
+  },
   plugins: [
     new CleanWebpackPlugin(), // 如果输出目录没有改动，默认清除dist目录内文件
     new HtmlWebpackPlugin({ title: 'Output Management' })
