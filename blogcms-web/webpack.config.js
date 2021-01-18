@@ -12,5 +12,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin()
-  ]
+  ],
+  module: {
+    rules: [
+      { test:/\.css$/, use:['style-loader', 'css-loader'] } // 必须先style-loader,再css-loader
+    ]
+  }
 }

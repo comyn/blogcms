@@ -1,13 +1,12 @@
-// const test = require('./test')
+import _ from 'lodash'
 
-// test()
-// test.test()
-// test.test1()
+function component () {
+  var element = document.createElement('div');
 
-import alertShow from './testes6'
-import { a, b } from './testes6';
+  // Lodash（目前通过一个 script 脚本引入）对于执行这一行是必需的
+  element.innerHTML = _.join(['Hello', 'webpack'], ' ');
 
-alertShow()
+  return element;
+}
 
-window.alert(a)
-window.alert(b)
+document.body.appendChild(component());
