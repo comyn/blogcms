@@ -14,6 +14,7 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist') // 指定生成的文件目录
   },
+  devtool: 'inline-source-map', // 用于开发环境的时候，可以看到错误出现的位置，比如js打包前的错误位置，上产环境取消使用
   plugins: [
     new CleanWebpackPlugin(), // 如果输出目录没有改动，默认清除dist目录内文件
     new HtmlWebpackPlugin({ title: 'Output Management' })
