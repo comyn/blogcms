@@ -1,5 +1,6 @@
 const path = require('path')
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = { 
   mode: 'development', // 指定环境: "production" | "development" | "none"
@@ -14,7 +15,8 @@ module.exports = {
     path: path.resolve(__dirname, './dist') // 指定生成的文件目录
   },
   plugins: [
-    new CleanWebpackPlugin() // 如果输出目录没有改动，默认清除dist目录内文件
+    new CleanWebpackPlugin(), // 如果输出目录没有改动，默认清除dist目录内文件
+    new HtmlWebpackPlugin({ title: 'Output Management' })
   ],
   module: {
     rules: [
