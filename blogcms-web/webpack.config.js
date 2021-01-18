@@ -15,7 +15,8 @@ module.exports = {
   ],
   module: {
     rules: [
-      { test:/\.css$/, use:['style-loader', 'css-loader'] } // 必须先style-loader,再css-loader
+      { test:/\.css$/, use:['style-loader', 'css-loader'] }, // 必须先style-loader,再css-loader
+      { test:/\.(png|svg|jpg|gif)$/, use: ['file-loader']} // 加载文件
     ]
   }
 }
