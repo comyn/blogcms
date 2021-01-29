@@ -13,7 +13,7 @@ const bodyParser = require('body-parser')
 // 加载数据模块
 
 const app = express()
-const port = 3000
+const port = 80
 
 // 设定port变量，意为访问端口
 // app.set('port', process.env.PORT || 3000)
