@@ -1,6 +1,6 @@
 -- 博客管理系统 DDL
 
-create database if not exists blogcms;
+create database if not exists blogcms default charset utf8mb4 collate utf8mb4_general_ci;;
 
 use blogcms;
 
