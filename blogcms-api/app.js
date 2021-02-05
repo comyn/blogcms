@@ -64,6 +64,10 @@ app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
+app.get('/api', function (req, res) {
+  res.send('Hello World111111!')
+})
+
 app.post('/', function (req, res) {
   res.send('Got a POST request')
 })
