@@ -7,30 +7,44 @@ module.exports = {
   // 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
   outputDir: 'dist',
   //放置生成的静态资源(js、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
-  assetsDir: 'static',
+  // assetsDir: '',
   //指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径。
   indexPath: 'index.html',
   // 用于多页配置，默认是 undefined
   pages: {
     main: {
       // page 的入口
-      entry: 'src/main.js',
+      entry: 'src/pages/main/main.js',
       // 模板来源
       template: 'public/index.html',
       // 在 dist/index.html 的输出
       filename: 'index.html',
       // 当使用 title 选项时，
       // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
-      title: 'Index Page',
+      title: 'Main Page'
       // 在这个页面中包含的块，默认情况下会包含
       // 提取出来的通用 chunk 和 vendor chunk。
-      chunks: ['chunk-vendors', 'chunk-common', 'index']
+      // chunks: ['chunk-vendors', 'chunk-common', 'main']
     },
+    search: {
+      // page 的入口
+      entry: 'src/pages/search/main.js',
+      // 模板来源
+      template: 'public/search.html',
+      // 在 dist/index.html 的输出
+      filename: 'search.html',
+      // 当使用 title 选项时，
+      // template 中的 title 标签需要是 <title><%= htmlWebpackPlugin.options.title %></title>
+      title: 'Search Page'
+      // 在这个页面中包含的块，默认情况下会包含
+      // 提取出来的通用 chunk 和 vendor chunk。
+      // chunks: ['chunk-vendors', 'chunk-common', 'main']
+    }
     // 当使用只有入口的字符串格式时，
     // 模板会被推导为 `public/subpage.html`
     // 并且如果找不到的话，就回退到 `public/index.html`。
     // 输出文件名会被推导为 `subpage.html`。
-    subpage: 'src/main.js'
+    // subpage: 'src/main.js'
   },
   // 是否在保存的时候使用 `eslint-loader` 进行检查。
   // 有效的值：`ture` | `false` | `"error"`
@@ -172,6 +186,7 @@ module.exports = {
     // 环境配置
     // host: 'localhost',
     port: 8080,
+    // index: '/index.html', //  默认启动页面
     https: false,
     hotOnly: false,
     // 查阅 https://github.com/vuejs/vue-docs-zh-cn/blob/master/vue-cli/cli-service.md#配置代理
