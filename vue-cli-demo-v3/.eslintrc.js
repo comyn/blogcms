@@ -19,7 +19,6 @@ module.exports = {
         singleQuote: true,
         trailingComma: 'none',
         htmlWhitespaceSensitivity: 'ignore'
-        // 'space-before-function-paren': 0 // <== 这一行代码
       }
     ]
   }
