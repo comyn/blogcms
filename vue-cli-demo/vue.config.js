@@ -14,7 +14,7 @@ module.exports = {
   indexPath: 'index.html',
   // 用于多页配置，默认是 undefined
   // 构建多页面应用，页面的配置
-  pages: Object.assign({}, generateDefaultEntry(), generateEntries()),
+  // pages: Object.assign({}, generateDefaultEntry(), generateEntries()),
   //文件名哈希值
   filenameHashing: true,
   // 是否在保存的时候使用 `eslint-loader` 进行检查。

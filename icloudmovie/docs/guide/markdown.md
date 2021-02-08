@@ -1,0 +1,5 @@
+[首页](/zh/README.md)  
+[指南](/zh/guide/)  
+[快速上手](./getting-started.md)  
+[markdown.links](../reference/config.md#links)  
+[GitHub](https://github.com)
